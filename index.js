@@ -5,7 +5,12 @@ const app = express();
 const PORT = 3000; // You can change the port if needed
 
 // Initialize Firebase Admin SDK
-const serviceAccount = require("./serviceAccountKey.json");
+if (!process.env.SERVICE_ACCOUNT_KEY) {
+  console.error("Environment variable SERVICE_ACCOUNT_KEY is missing!");
+  process.exit(1);
+}
+
+const serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT_KEY);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
