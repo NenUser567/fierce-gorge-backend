@@ -45,6 +45,20 @@ binRef.on("value", (snapshot) => {
   }
 });
 
+// API route to get bin status and distance
+const binDataRef = db.ref("/bin");
+
+app.get("/bin-data", async (req, res) => {
+  try {
+    const snapshot = await binDataRef.once("value");
+    const binData = snapshot.val();
+    res.status(200).json(binData);
+  } catch (error) {
+    console.error("Error fetching bin data:", error);
+    res.status(500).json({ error: "Failed to fetch bin data" });
+  }
+});
+
 // Start the server (optional for health checks)
 app.get("/", (req, res) => {
   res.send("Backend is running!");
